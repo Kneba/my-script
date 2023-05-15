@@ -88,7 +88,7 @@ compile(){
 cd ${KERNEL_ROOTDIR}
 export HASH_HEAD=$(git rev-parse --short HEAD)
 export COMMIT_HEAD=$(git log --oneline -1)
-make -j$(nproc) O=out ARCH=arm64 kernel
+make -j$(nproc) O=out ARCH=arm64 X00TD_defconfig
 make -j$(nproc) ARCH=arm64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib64:${LD_LIBRARY_PATH}" \
     PATH=$ClangPath/bin:$GCCaPath/bin:$GCCbPath/bin:/usr/bin:${PATH} \
@@ -140,7 +140,7 @@ function push() {
         <b>🆑 Changelog: </b>
         - <code>$COMMIT_HEAD</code>
         <b></b>
-        #TheOneMemory #Onyx #HMP"
+        #$KERNELNAME #$CODENAME #$VARIANT"
 }
 # Find Error
 function finerr() {
