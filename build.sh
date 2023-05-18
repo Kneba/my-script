@@ -52,10 +52,9 @@ git clone --depth=1 https://github.com/ThankYouMario/proprietary_vendor_qcom_sdc
 # Clone GCC
 mkdir $GCCaPath
 mkdir $GCCbPath
-wget -q https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -O "gcc64.tar.gz"
-tar -xf gcc64.tar.gz -C $GCCaPath
-wget -q https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -O "gcc32.tar.gz"
-tar -xf gcc32.tar.gz -C $GCCbPath
+
+git clone --depth=1 https://github.com/RyuujiX/aarch64-linux-android-4.9 -b android-12.0.0_r15 $GCCaPath
+git clone --depth=1 https://github.com/RyuujiX/arm-linux-androideabi-4.9 -b android-12.0.0_r15 $GCCbPath
 
 # Prepared
 KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root directory.
@@ -87,20 +86,14 @@ cd ${KERNEL_ROOTDIR}
 export HASH_HEAD=$(git rev-parse --short HEAD)
 export COMMIT_HEAD=$(git log --oneline -1)
 make -j$(nproc) O=out ARCH=arm64 X00TD_defconfig
-make -j$(nproc) ARCH=arm64 O=out \
-    LD_LIBRARY_PATH="${ClangPath}/lib64:${LD_LIBRARY_PATH}" \
+make -j$(nproc) ARCH=arm64 SUBARCH=ARM64 O=out \
     PATH=$ClangPath/bin:$GCCaPath/bin:$GCCbPath/bin:/usr/bin:${PATH} \
-
-    AS=llvm-as \
-    LD=ld.lld \
-    NM=llvm-nm \
-    OBJCOPY=llvm-objcopy \
-    OBJDUMP=llvm-objdump \
-    STRIP=llvm-strip \
+    CC=clang \
     CROSS_COMPILE=aarch64-linux-android- \
     CROSS_COMPILE_ARM32=arm-linux-androideabi- \
-    CLANG_TRIPLE=aarch64-linux-gnu-
-
+    CLANG_TRIPLE=aarch64-linux-gnu- \
+    HOSTCC=gcc \
+    HOSTCXX=g++
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
