@@ -43,8 +43,7 @@ cdir() {
 ##------------------------------------------------------##
 ##----------Basic Informations, COMPULSORY--------------##
 
-git clone --depth=1 https://github.com/$USERNAME/Ruega-Kernel-X00T -b 9x13 kernel
-
+git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/Ruega-Kernel-X00T -b 9x13 kernel
 cd kernel
 
 # The defult directory where the kernel should be placed
