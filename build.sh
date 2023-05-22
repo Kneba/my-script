@@ -24,10 +24,6 @@ MainPath="$(pwd)"
 MainClangPath="${MainPath}/clang"
 MainClangZipPath="${MainPath}/clang-zip"
 ClangPath="${MainClangZipPath}"
-GCCaPath="${MainPath}/GCC64"
-GCCbPath="${MainPath}/GCC32"
-MainZipGCCaPath="${MainPath}/GCC64-zip"
-MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 # Identity
 VERSION=9x13
@@ -47,19 +43,12 @@ ClangPath=${MainClangZipPath}
 mkdir $ClangPath
 rm -rf $ClangPath/*
 
+git clone --depth=1 https://gitlab.com/strongreasons/stress-clang.git $ClangPath
 #git clone --depth=1 https://gitlab.com/ImSurajxD/clang-r450784d -b master $ClangPath
-wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/b52bad393812a7051b3a1294efa80ad2d9380ad1/clang-r458507.tar.gz -O "clang-r458507.tar.gz"
-tar -xf clang-r458507.tar.gz -C $ClangPath
+#wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/b52bad393812a7051b3a1294efa80ad2d9380ad1/clang-r458507.tar.gz -O "clang-r458507.tar.gz"
+#tar -xf clang-r458507.tar.gz -C $ClangPath
 
-# Clone GCC
-mkdir $GCCaPath
-mkdir $GCCbPath
-wget -q https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -O "gcc64.tar.gz"
-tar -xf gcc64.tar.gz -C $GCCaPath
-wget -q https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/+archive/refs/tags/android-12.1.0_r27.tar.gz -O "gcc32.tar.gz"
-tar -xf gcc32.tar.gz -C $GCCbPath
-
-# Prepared
+# Prepare
 KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root directory.
 export LD=ld.lld
 export KBUILD_BUILD_USER=queen # Change with your own name or else.
@@ -89,9 +78,9 @@ cd ${KERNEL_ROOTDIR}
 export HASH_HEAD=$(git rev-parse --short HEAD)
 export COMMIT_HEAD=$(git log --oneline -1)
 make -j$(nproc) O=out ARCH=arm64 X00TD_defconfig
-make -j$(nproc) ARCH=arm64 O=out \
+make -j$(nproc) ARCH=arm64 SUBARCH=ARM64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib64:${LD_LIBRARY_PATH}" \
-    PATH=$ClangPath/bin:$GCCaPath/bin:$GCCbPath/bin:/usr/bin:${PATH} \
+    PATH=$ClangPath/bin:${PATH} \
     CC=${ClangPath}/bin/clang \
     NM=${ClangPath}/bin/llvm-nm \
     CXX=${ClangPath}/bin/clang++ \
@@ -102,8 +91,7 @@ make -j$(nproc) ARCH=arm64 O=out \
     OBJSIZE=${ClangPath}/bin/llvm-size \
     READELF=${ClangPath}/bin/llvm-readelf \
     CROSS_COMPILE=aarch64-linux-android- \
-    CROSS_COMPILE_ARM32=arm-linux-androideabi- \
-    CLANG_TRIPLE=aarch64-linux-gnu- \
+    CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
     HOSTAR=${ClangPath}/bin/llvm-ar \
     HOSTCC=${ClangPath}/bin/clang \
     HOSTCXX=${ClangPath}/bin/clang++
