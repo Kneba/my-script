@@ -81,20 +81,15 @@ make -j$(nproc) O=out ARCH=arm64 X00TD_defconfig
 make -j$(nproc) ARCH=arm64 SUBARCH=ARM64 O=out \
     LD_LIBRARY_PATH="${ClangPath}/lib64:${LD_LIBRARY_PATH}" \
     PATH=$ClangPath/bin:${PATH} \
-    CC=${ClangPath}/bin/clang \
-    NM=${ClangPath}/bin/llvm-nm \
-    CXX=${ClangPath}/bin/clang++ \
-    AR=${ClangPath}/bin/llvm-ar \
-    STRIP=${ClangPath}/bin/llvm-strip \
-    OBJCOPY=${ClangPath}/bin/llvm-objcopy \
-    OBJDUMP=${ClangPath}/bin/llvm-objdump \
-    OBJSIZE=${ClangPath}/bin/llvm-size \
-    READELF=${ClangPath}/bin/llvm-readelf \
-    CROSS_COMPILE=aarch64-linux-android- \
+    CROSS_COMPILE=aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
-    HOSTAR=${ClangPath}/bin/llvm-ar \
-    HOSTCC=${ClangPath}/bin/clang \
-    HOSTCXX=${ClangPath}/bin/clang++
+    CC=clang \
+    AR=llvm-ar \
+    OBJDUMP=llvm-objdump \
+    STRIP=llvm-strip \
+    NM=llvm-nm \
+    OBJCOPY=llvm-objcopy \
+    LD="ld.lld"
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
