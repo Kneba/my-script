@@ -28,14 +28,14 @@ ClangPath="${MainClangZipPath}"
 # Identity
 VERSION=9x13
 KERNELNAME=TheOneMemory
-CODENAME=Hayzel
-VARIANT=HMP
+CODENAME=Onyx
+VARIANT=EAS
 
 # Show manufacturer info
 MANUFACTURERINFO="ASUSTek Computer Inc."
 
 # Clone Kernel Source
-git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/Ruega-Kernel-X00T -b 9x13s kernel
+git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/Ruega-Kernel-X00T -b easu kernel
 
 # Clone AOSP Clang
 ClangPath=${MainClangZipPath}
@@ -52,7 +52,7 @@ git clone --depth=1 https://gitlab.com/strongreasons/stress-clang.git $ClangPath
 KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root directory.
 export LD=ld.lld
 export KBUILD_BUILD_USER=queen # Change with your own name or else.
-export KBUILD_BUILD_HOST=Heterogeneous Multi-Processing # Change with your own host or else.
+export KBUILD_BUILD_HOST=Energy Aware Scheduling # Change with your own host or else.
 IMAGE=$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb
 CLANG_VER="$("$ClangPath"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$ClangPath"/bin/ld.lld --version | head -n 1)"
@@ -96,7 +96,7 @@ make -j$(nproc) ARCH=arm64 SUBARCH=ARM64 O=out \
 	finerr
 	exit 1
    fi
-   git clone https://github.com/strongreasons/AnyKernel3 -b hmp-12 AnyKernel
+   git clone https://github.com/strongreasons/AnyKernel3 -b eas AnyKernel
 	cp $IMAGE AnyKernel
 }
 # Push kernel to telegram
