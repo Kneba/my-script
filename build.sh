@@ -28,14 +28,14 @@ ClangPath="${MainClangZipPath}"
 # Identity
 VERSION=9x13
 KERNELNAME=TheOneMemory
-CODENAME=Hayzel
+CODENAME=Onyx
 VARIANT=HMP
 
 # Show manufacturer info
 MANUFACTURERINFO="ASUSTek Computer Inc."
 
 # Clone Kernel Source
-git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/Ruega-Kernel-X00T -b 9x13s kernel
+git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/Ruega-Kernel-X00T -b 9x13 kernel
 
 # Clone AOSP Clang
 ClangPath=${MainClangZipPath}
