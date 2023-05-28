@@ -58,6 +58,8 @@ IMAGE=$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb
 #CLANG_VER="$("$ClangPath"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 #LLD_VER="$("$ClangPath"/bin/ld.lld --version | head -n 1)"
 #export KBUILD_COMPILER_STRING="$CLANG_VER"
+export CROSS_COMPILE=aarch64-linux-gnu-
+export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 
