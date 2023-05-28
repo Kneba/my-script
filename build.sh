@@ -30,16 +30,16 @@ MainZipGCCaPath="${MainPath}/GCC64-zip"
 MainZipGCCbPath="${MainPath}/GCC32-zip"
 
 # Identity
-VERSION=9x13
+VERSION=WIP
 KERNELNAME=TheOneMemory
-CODENAME=Onyx
+CODENAME=Hayzel
 VARIANT=HMP
 
 # Show manufacturer info
 MANUFACTURERINFO="ASUSTek Computer Inc."
 
 # Clone Kernel Source
-git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/Ruega-Kernel-X00T -b 9x13 kernel
+git clone --depth=1 https://$USERNAME:$TOKEN@github.com/$USERNAME/android_kernel_asus_sdm660-4.4 -b lineage-18.1 kernel
 
 # Clone AOSP Clang
 ClangPath=${MainClangZipPath}
@@ -47,14 +47,8 @@ ClangPath=${MainClangZipPath}
 mkdir $ClangPath
 rm -rf $ClangPath/*
 
-git clone --depth=1 https://github.com/ThankYouMario/proprietary_vendor_qcom_sdclang -b ruby-12 $ClangPath
+git clone --depth=1 https://github.com/pkm774/android-kernel-tools $ClangPath
 
-# Clone GCC
-mkdir $GCCaPath
-mkdir $GCCbPath
-
-git clone --depth=1 https://github.com/RyuujiX/aarch64-linux-android-4.9 -b android-12.0.0_r15 $GCCaPath
-git clone --depth=1 https://github.com/RyuujiX/arm-linux-androideabi-4.9 -b android-12.0.0_r15 $GCCbPath
 
 # Prepared
 KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root directory.
@@ -87,13 +81,9 @@ export HASH_HEAD=$(git rev-parse --short HEAD)
 export COMMIT_HEAD=$(git log --oneline -1)
 make -j$(nproc) O=out ARCH=arm64 X00TD_defconfig
 make -j$(nproc) ARCH=arm64 SUBARCH=ARM64 O=out \
-    PATH=$ClangPath/bin:$GCCaPath/bin:$GCCbPath/bin:/usr/bin:${PATH} \
-    CC=clang \
-    CROSS_COMPILE=aarch64-linux-android- \
-    CROSS_COMPILE_ARM32=arm-linux-androideabi- \
-    CLANG_TRIPLE=aarch64-linux-gnu- \
-    HOSTCC=gcc \
-    HOSTCXX=g++
+    PATH="$ClangPath/sdclang/linux-x86_64/bin:$PATH" \
+    CC=clang
+
 
    if ! [ -a "$IMAGE" ]; then
 	finerr
