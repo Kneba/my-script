@@ -49,6 +49,10 @@ rm -rf $ClangPath/*
 
 git clone --depth=1 https://github.com/pkm774/android-kernel-tools $ClangPath
 
+mkdir $GCCbPath
+mkdir $GCCbPath
+git clone --depth=1 https://github.com/chips-project/priv-toolchains -b non-elf/gcc-9.2.0/arm64 $GCCaPath
+git clone --depth=1 https://github.com/chips-project/priv-toolchains -b non-elf/gcc-9.2.0/arm $GCCbPath
 
 # Prepared
 KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root directory.
