@@ -61,11 +61,11 @@ KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root dir
 #export LD=ld.lld
 export KBUILD_BUILD_USER=queen # Change with your own name or else.
 IMAGE=$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb
-CLANG_VER="$("$ClangPath"sdclang/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
+CLANG_VER="$("$ClangPath"/sdclang/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 #LLD_VER="$("$ClangPath"/bin/ld.lld --version | head -n 1)"
 
 KBUILD_COMPILER_STRING=$("$GCCaPath"/bin/aarch64-linux-gnu-gcc --version | head -n 1)
-PATH=$GCC64_DIR/bin/:$GCCbPath/bin/:/usr/bin:$PATH
+PATH=$GCCaPath/bin/:$GCCbPath/bin/:/usr/bin:$PATH
 export CROSS_COMPILE=aarch64-linux-gnu-
 export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 export KBUILD_COMPILER_STRING="$CLANG_VER X GCC 9.2"
