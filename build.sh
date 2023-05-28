@@ -53,22 +53,22 @@ mkdir $GCCbPath
 rm -rf $GCCaPath/*
 mkdir $GCCbPath
 rm -rf $GCCbPath/*
-git clone --depth=1 https://github.com/chips-project/priv-toolchains -b non-elf/gcc-9.2.0/arm64 $GCCaPath
-git clone --depth=1 https://github.com/chips-project/priv-toolchains -b non-elf/gcc-9.2.0/arm $GCCbPath
+git clone --depth=1 https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $GCCaPath
+git clone --depth=1 https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc $GCCbPath
 
 # Prepared
 KERNEL_ROOTDIR=$(pwd)/kernel # IMPORTANT ! Fill with your kernel source root directory.
 #export LD=ld.lld
 export KBUILD_BUILD_USER=queen # Change with your own name or else.
 IMAGE=$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb
-CLANG_VER="$("$ClangPath"/sdclang/linux-x86_64/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
+#CLANG_VER="$("$ClangPath"/sdclang/linux-x86_64/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 #LLD_VER="$("$ClangPath"/bin/ld.lld --version | head -n 1)"
 
 KBUILD_COMPILER_STRING=$("$GCCaPath"/bin/aarch64-linux-gnu-gcc --version | head -n 1)
-PATH=$GCCaPath/bin/:$GCCbPath/bin/:/usr/bin:$PATH
+#PATH=$GCCaPath/bin/:$GCCbPath/bin/:/usr/bin:$PATH
 export CROSS_COMPILE=aarch64-linux-gnu-
 export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-export KBUILD_COMPILER_STRING="$CLANG_VER X GCC 9.2"
+#export KBUILD_COMPILER_STRING="$CLANG_VER X GCC 10"
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 
@@ -92,7 +92,7 @@ export HASH_HEAD=$(git rev-parse --short HEAD)
 export COMMIT_HEAD=$(git log --oneline -1)
 make -j$(nproc) O=out ARCH=arm64 X00TD_defconfig
 make -j$(nproc) ARCH=arm64 SUBARCH=ARM64 O=out \
-    PATH="$ClangPath/sdclang/linux-x86_64/bin:$PATH" \
+    PATH=$ClangPath/sdclang/linux-x86_64/bin:$GCCaPath/bin:$GCCbPath/bin:/usr/bin:${PATH} \
     CC=clang \
     CROSS_COMPILE=aarch64-linux-gnu- \
     CROSS_COMPILE_ARM32=arm-linux-gnueabi-
